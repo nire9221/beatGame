@@ -74,9 +74,14 @@ public class DynamicBeat extends JFrame {
 	private Music introMusic = new Music("music.mp3", true);
 	private int nowSelected = 0; // 현재 선택된 트랙
 
-	public static Game game = new Game();
+	public static Game game;
 	
 	public DynamicBeat() {
+		
+		//String titleImage, String startImage, String gameImage, String startMusic, String gameMusic
+				trackList.add(new Track("gamebg2.jpg", "gamebg2.jpg", "background2.jpg", "music2Selected.mp3", "music2.mp3", "music2"));
+				trackList.add(new Track("gamebg3.jpg", "gamebg3.jpg", "background3.jpg", "music3Selected.mp3", "music3.mp3", "music3"));
+		
 		setUndecorated(true); // hide menu bar
 		setTitle("Dynamic Beat");
 		setSize(Main.SCREEN_WIDTH, Main.SCREEN_HEIGHT); // 스크린 사이즈
@@ -91,9 +96,7 @@ public class DynamicBeat extends JFrame {
 		// play music when starting game
 		introMusic.start();
 
-//String titleImage, String startImage, String gameImage, String startMusic, String gameMusic
-		trackList.add(new Track("gamebg2.jpg", "gamebg2.jpg", "background2.jpg", "music2Selected.mp3", "music2.mp3"));
-		trackList.add(new Track("gamebg3.jpg", "gamebg3.jpg", "background3.jpg", "music3Selected.mp3", "music3.mp3"));
+
 
 //exit button
 		exitButton.setBounds(1245, 0, 30, 30);
@@ -284,7 +287,7 @@ public class DynamicBeat extends JFrame {
 //						Music buttonEnteredMusic = new Music("buttonClickedMusic.mp3", false);
 //						buttonEnteredMusic.start();
 				// easy mode
-				gameStart(nowSelected, "easy");
+				gameStart(nowSelected, "Easy");
 
 			}
 		});
@@ -316,7 +319,7 @@ public class DynamicBeat extends JFrame {
 //						Music buttonEnteredMusic = new Music("buttonClickedMusic.mp3", false);
 //						buttonEnteredMusic.start();
 				// hard mode
-				gameStart(nowSelected, "hard");
+				gameStart(nowSelected, "Hard");
 			}
 		});
 		add(hardButton);
@@ -392,6 +395,12 @@ public class DynamicBeat extends JFrame {
 
 		}
 		paintComponents(g); // always existing image (not dynamic, ex: menubar, button, add(....))
+		
+		try {
+			Thread.sleep(5);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		this.repaint();
 	}
 
@@ -437,6 +446,8 @@ public class DynamicBeat extends JFrame {
 					.getImage();
 			backButton.setVisible(true);
 			isGameScreen = true;
+			game = new Game (trackList.get(nowSelected).getTitleName(),difficulty, trackList.get(nowSelected).getGameMusic());
+			game.start();
 			setFocusable(true);
 		}
 	}
@@ -451,6 +462,7 @@ public class DynamicBeat extends JFrame {
 		backButton.setVisible(false);
 		isGameScreen = false;
 		selectTrack(nowSelected);
+		game.close();
 	}
 
 	public void enterMain() {
